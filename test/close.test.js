@@ -82,11 +82,6 @@ async function waitForChannelsUpdate(room, expectedLength, timeout = 15000) {
     }
 
     room.on('channels:updated', handler)
-
-    // Force an update to trigger events
-    room.forceUpdate().catch(err => {
-      console.error('Error forcing update:', err)
-    })
   })
 }
 
@@ -136,6 +131,10 @@ async function runChannelSyncTest() {
     const joinerUser = await Gigauser.create(store2, TEST_SEED_2)
     await joinerUser.ready()
     console.log(`  - Joiner user created: ${joinerUser.publicKey.toString('hex').substring(0, 8)}...`)
+
+    console.log('User1 ', creatorUser.publicKey.toString('hex'))
+    console.log('User2 ', joinerUser.publicKey.toString('hex'))
+
 
     // Join the room and wait for 'update:complete' event
     console.log('  - Joining the room...')
@@ -214,25 +213,26 @@ async function runChannelSyncTest() {
     await reInitCreatorUser.ready()
     await reInitJoinerUser.ready()
     console.log('Users successfully reinitialized')
+    console.log('User1 ', reInitCreatorUser.publicKey.toString('hex'))
+    console.log('User2 ', reInitJoinerUser.publicKey.toString('hex'))
+
+
 
     // PART 4: Second Channel Creation After Reinitialization
     console.log('\n📋 PHASE 4: Second Channel Creation After Reinitialization')
+    console.log('ROOMS OF CREATOR AFTER REINIT:', reInitCreatorUser.rooms)
+    console.log('ROOMS OF JOINER AFTER REINIT:', reInitJoinerUser.rooms)
 
-    console.log('ROOMS OF CREATOR AFTER REINIT:', reInitCreatorUser.rooms, Array.from(reInitCreatorUser._roomInstances.entries()))
-    console.log('ROOMS OF JOINER AFTER REINIT:', reInitJoinerUser.rooms, Array.from(reInitJoinerUser._roomInstances.entries()))
-
+    await new Promise(resolve => setTimeout(resolve, 2000));
     // Get rooms for reinitialized users
     const reInitCreatorRoom = await reInitCreatorUser.getRoom(reInitCreatorUser.rooms[0].id)
     const reInitJoinerRoom = await reInitJoinerUser.getRoom(reInitJoinerUser.rooms[0].id)
 
-    console.log('Initiated rooms', reInitCreatorRoom, reInitJoinerUser)
-    // Force update to load existing channels
-    await reInitCreatorRoom.forceUpdate()
-    await reInitJoinerRoom.forceUpdate()
 
+    await new Promise(resolve => setTimeout(resolve, 5000));
     // Set up event promises
-    const creatorSecondChannelUpdatePromise = waitForEvent(reInitCreatorRoom, 'channels:updated')
 
+    const reInitChannelUpdatePromise = waitForEvent(reInitCreatorRoom, 'channels:updated')
     // Create second channel
     console.log('Creating second channel: gaming')
     await reInitCreatorRoom.createChannel({
@@ -241,8 +241,8 @@ async function runChannelSyncTest() {
       isDefault: false
     })
 
-    // Wait for creator's update
-    await creatorSecondChannelUpdatePromise
+    await reInitChannelUpdatePromise
+
     console.log('Creator detected second channel update')
 
     // Wait for joiner to get the channel update

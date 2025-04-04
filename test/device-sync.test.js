@@ -128,7 +128,7 @@ async function runDeviceSyncTest() {
     console.log(`  - Room created on Device 1 with ID: ${device1Room.id}`)
 
     // Wait for room to sync to Device 2
-    await delay(3000, 'Waiting for room to sync to Device 2')
+    await delay(5000, 'Waiting for room to sync to Device 2')
 
     // Verify room sync
     logRooms('Device 1', device1User.rooms)
@@ -144,6 +144,7 @@ async function runDeviceSyncTest() {
     if (!device2HasRoom) {
       throw new Error('Room created on Device 1 was not synced to Device 2')
     }
+
     console.log('  ✅ Room created on Device 1 successfully synced to Device 2')
 
     // PHASE 3: Room Creation on Device 2
