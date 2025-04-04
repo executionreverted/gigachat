@@ -229,10 +229,10 @@ async function runChannelSyncTest() {
     const reInitJoinerRoom = await reInitJoinerUser.getRoom(reInitJoinerUser.rooms[0].id)
 
 
+    const reInitChannelUpdatePromise = waitForEvent(reInitCreatorRoom, 'channels:updated')
     await new Promise(resolve => setTimeout(resolve, 5000));
     // Set up event promises
 
-    const reInitChannelUpdatePromise = waitForEvent(reInitCreatorRoom, 'channels:updated')
     // Create second channel
     console.log('Creating second channel: gaming')
     await reInitCreatorRoom.createChannel({
