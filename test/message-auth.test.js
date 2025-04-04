@@ -205,7 +205,10 @@ async function runMessageAuthTest() {
     await senderRoom.editMessage(messageId, editedContent);
     console.log('  - Message edited');
 
+
+
     await editMessageEvent
+    await delay(3000)
     // Wait for edit to sync to receiver
     console.log('  - Waiting for edited message to sync...');
     const syncedEditedMessage = await waitForMessageSync(receiverRoom, channelId, messageId);
@@ -297,3 +300,8 @@ runMessageAuthTest().catch(error => {
   console.error('Error running tests:', error);
   process.exit(1);
 });
+
+
+async function delay(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms))
+}
