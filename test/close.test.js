@@ -218,8 +218,8 @@ async function runChannelSyncTest() {
     // PART 4: Second Channel Creation After Reinitialization
     console.log('\n📋 PHASE 4: Second Channel Creation After Reinitialization')
 
-    console.log('ROOMS OF CREATOR AFTER REINIT:', reInitCreatorUser.rooms)
-    console.log('ROOMS OF JOINER AFTER REINIT:', reInitJoinerUser.rooms)
+    console.log('ROOMS OF CREATOR AFTER REINIT:', reInitCreatorUser.rooms, Array.from(reInitCreatorUser._roomInstances.entries()))
+    console.log('ROOMS OF JOINER AFTER REINIT:', reInitJoinerUser.rooms, Array.from(reInitJoinerUser._roomInstances.entries()))
 
     // Get rooms for reinitialized users
     const reInitCreatorRoom = await reInitCreatorUser.getRoom(reInitCreatorUser.rooms[0].id)
