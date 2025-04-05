@@ -216,8 +216,10 @@ async function runDeviceSyncTest() {
     // Get and verify the message on device 2
     const syncedMessage = await device2Room.getMessage(messageId)
     console.log('  - Message successfully synced to device 2')
-    console.log(`  - Original message content: "${syncedMessage.content}"`)
+    // console.log(`  - Original message content: "${syncedMessage.content}"`)
 
+    console.log('Waiting for writable event')
+    // await waitForEvent(device2Room, 'writable')
     // Edit the message from device 2
     console.log('  - Editing message from device 2...')
     const editedContent = 'This message was edited by device 2!'
@@ -237,8 +239,8 @@ async function runDeviceSyncTest() {
     // Get and verify the edited message on device 1
     const editedMessage = await device1Room.getMessage(messageId)
     console.log('  - Edited message successfully synced back to device 1')
-    console.log(`  - Edited message content: "${editedMessage.content}"`)
-    console.log(`  - Message edited flag: ${editedMessage.edited}`)
+    // console.log(`  - Edited message content: "${editedMessage.content}"`)
+    // console.log(`  - Message edited flag: ${editedMessage.edited}`)
 
     if (editedMessage.content !== editedContent) {
       throw new Error('Edited message content mismatch')
